@@ -139,7 +139,7 @@ export function slugify(input: string) {
     .slice(0, 60);
 }
 
-/** Uploads a file to the shop image library and returns a long-lived link. */
+/** Uploads a file to the public shop image library and returns its permanent link. */
 export async function uploadStoreImage(file: File, folder = "products") {
   const ext = file.name.split(".").pop() ?? "jpg";
   const path = `${folder}/${crypto.randomUUID()}.${ext}`;
@@ -148,9 +148,6 @@ export async function uploadStoreImage(file: File, folder = "products") {
     upsert: false,
   });
   if (error) throw error;
-  const { data, error: signError } = await supabase.storage
-    .from("images")
-    .createSignedUrl(path, 60 * 60 * 24 * 365 * 5);
-  if (signError) throw signError;
-  return data.signedUrl;
+  const { data } = supabase.storage.from("images").getPublicUrl(path);
+  return data.publicUrl;
 }
