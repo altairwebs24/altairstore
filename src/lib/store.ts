@@ -1,5 +1,16 @@
 import { supabase } from "@/integrations/supabase/client";
 
+export type VariantOption = {
+  name: string;
+  image?: string | null;
+  price_delta?: number;
+};
+
+export type VariantGroup = {
+  name: string;
+  options: VariantOption[];
+};
+
 export type Product = {
   id: string;
   slug: string;
@@ -15,8 +26,10 @@ export type Product = {
   published: boolean;
   source_url: string | null;
   specs: Record<string, string>;
+  variants: VariantGroup[];
   created_at: string;
 };
+
 
 export type Sale = {
   id: string;

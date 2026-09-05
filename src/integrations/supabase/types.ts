@@ -116,6 +116,7 @@ export type Database = {
           stock: number
           tagline: string | null
           updated_at: string
+          variants: Json
         }
         Insert: {
           category?: string
@@ -134,6 +135,7 @@ export type Database = {
           stock?: number
           tagline?: string | null
           updated_at?: string
+          variants?: Json
         }
         Update: {
           category?: string
@@ -152,6 +154,7 @@ export type Database = {
           stock?: number
           tagline?: string | null
           updated_at?: string
+          variants?: Json
         }
         Relationships: []
       }
