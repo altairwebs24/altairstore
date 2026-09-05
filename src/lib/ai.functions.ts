@@ -143,7 +143,7 @@ export const importFromLink = createServerFn({ method: "POST" })
         `Page text:\n${text}`,
         "",
         "Return JSON with keys:",
-        '{"name": string, "tagline": string (max 6 words), "description": string (two paragraphs, 45-70 words each, fully rewritten), "price": number (USD, 0 if unknown), "category": string, "specs": { "case": string, "movement": string, "glass": string, "water": string }}',
+        '{"name": string, "tagline": string (max 6 words), "description": string (two paragraphs, 45-70 words each, fully rewritten), "price": number (ZAR, 0 if unknown), "category": string, "specs": { "case": string, "movement": string, "glass": string, "water": string }}',
         "Do not copy supplier sentences verbatim. Do not include any other keys.",
       ].join("\n"),
     );
