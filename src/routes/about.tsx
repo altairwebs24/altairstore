@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import boxDesk from "@/assets/box-skeleton-desk.png.asset.json";
-import slim from "@/assets/box-silver-slim.png.asset.json";
+import { boxSkeletonDesk as boxDesk, boxSilverSlim as slim } from "@/lib/media";
 
 export const Route = createFileRoute("/about")({
   head: () => ({

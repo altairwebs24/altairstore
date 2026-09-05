@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, Link, useNavigate } from "@tanstack/react-rout
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/use-auth";
-import logo from "@/assets/logo.png.asset.json";
+import { logo } from "@/lib/media";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
