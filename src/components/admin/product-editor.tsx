@@ -217,7 +217,7 @@ export function ProductEditor({
             />
           </label>
           <label className="block">
-            <Label>Price (USD)</Label>
+            <Label>Price (ZAR / R)</Label>
             <input
               type="number"
               min="0"
