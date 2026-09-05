@@ -5,7 +5,7 @@ import { SiteHeader } from "@/components/site-header";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useAuth } from "@/lib/use-auth";
-import logo from "@/assets/logo.png.asset.json";
+import { logo } from "@/lib/media";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({

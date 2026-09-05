@@ -4,11 +4,13 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ProductCard } from "@/components/product-card";
 import { productsQuery, salesQuery } from "@/lib/store";
-import hero from "@/assets/watch-black-dial.jpg.asset.json";
-import film01 from "@/assets/film-01.mp4.asset.json";
-import film02 from "@/assets/film-02.mp4.asset.json";
-import film03 from "@/assets/film-03.mp4.asset.json";
-import boxSkeleton from "@/assets/box-skeleton.png.asset.json";
+import {
+  watchBlackDial as hero,
+  film01,
+  film02,
+  film03,
+  boxSkeleton,
+} from "@/lib/media";
 
 export const Route = createFileRoute("/")({
   head: () => ({

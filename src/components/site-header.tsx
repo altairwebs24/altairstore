@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Menu, ShoppingBag, X } from "lucide-react";
 import { useState } from "react";
-import logo from "@/assets/logo.png.asset.json";
+import { logo } from "@/lib/media";
 import { useCart } from "@/lib/cart";
 
 const NAV = [
