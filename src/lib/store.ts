@@ -120,9 +120,9 @@ export const ordersQuery = {
 };
 
 export function formatPrice(value: number) {
-  return new Intl.NumberFormat("en-US", {
+  return new Intl.NumberFormat("en-ZA", {
     style: "currency",
-    currency: "USD",
+    currency: "ZAR",
     maximumFractionDigits: 0,
   }).format(value);
 }
