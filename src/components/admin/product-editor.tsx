@@ -79,7 +79,7 @@ export function ProductEditor({
   const updateGroup = (gi: number, group: VariantGroup) =>
     setDraft((d) => ({ ...d, variants: d.variants.map((g, i) => (i === gi ? group : g)) }));
 
-  const updateOption = (gi: number, oi: number, option: VariantGroup["options"][number]) =>
+  const updateOption = (option: VariantGroup["options"][number], gi: number, oi: number) =>
     setDraft((d) => ({
       ...d,
       variants: d.variants.map((g, i) =>
@@ -397,14 +397,14 @@ export function ProductEditor({
                       className={adminField}
                       placeholder="Option name (Midnight)"
                       value={option.name}
-                      onChange={(e) => updateOption(gi, oi, { ...option, name: e.target.value })}
+                      onChange={(e) => updateOption({ ...option, name: e.target.value }, gi, oi)}
                     />
                     <input
                       className={adminField}
                       placeholder="Photo address (optional)"
                       value={option.image ?? ""}
                       onChange={(e) =>
-                        updateOption(gi, oi, { ...option, image: e.target.value || null })
+                        updateOption({ ...option, image: e.target.value || null }, gi, oi)
                       }
                     />
                     <input
@@ -413,10 +413,13 @@ export function ProductEditor({
                       placeholder="± R"
                       value={option.price_delta ?? ""}
                       onChange={(e) =>
-                        updateOption(gi, oi, {
-                          ...option,
-                          price_delta: e.target.value ? Number(e.target.value) : undefined,
-                        })
+                        updateOption(
+                          e.target.value
+                            ? { ...option, price_delta: Number(e.target.value) }
+                            : { name: option.name, image: option.image ?? null },
+                          gi,
+                          oi,
+                        )
                       }
                     />
                     <GhostButton
