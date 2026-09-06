@@ -53,7 +53,7 @@ function CartPage() {
         lines.map((l) => ({
           order_id: order.id,
           product_id: l.productId,
-          product_name: l.name,
+          product_name: l.variantLabel ? `${l.name} (${l.variantLabel})` : l.name,
           unit_price: l.price,
           quantity: l.quantity,
         })),
@@ -92,16 +92,21 @@ function CartPage() {
         <div className="px-6 py-8">
           <div className="space-y-5">
             {lines.map((line) => (
-              <div key={line.productId} className="flex gap-4 border-b border-mercury pb-5">
+              <div key={line.id} className="flex gap-4 border-b border-mercury pb-5">
                 <div className="size-20 shrink-0 overflow-hidden rounded-lg bg-mercury">
                   {line.image && <img src={line.image} alt="" className="size-full object-cover" />}
                 </div>
                 <div className="flex-1">
                   <h2 className="font-serif text-base">{line.name}</h2>
+                  {line.variantLabel && (
+                    <p className="mt-0.5 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      {line.variantLabel}
+                    </p>
+                  )}
                   <p className="mt-1 text-sm font-semibold">{formatPrice(line.price)}</p>
                   <div className="mt-2 flex items-center gap-3">
                     <button
-                      onClick={() => setQuantity(line.productId, line.quantity - 1)}
+                      onClick={() => setQuantity(line.id, line.quantity - 1)}
                       className="size-7 rounded-full border border-mercury text-sm"
                       aria-label="Decrease quantity"
                     >
@@ -109,14 +114,14 @@ function CartPage() {
                     </button>
                     <span className="text-sm">{line.quantity}</span>
                     <button
-                      onClick={() => setQuantity(line.productId, line.quantity + 1)}
+                      onClick={() => setQuantity(line.id, line.quantity + 1)}
                       className="size-7 rounded-full border border-mercury text-sm"
                       aria-label="Increase quantity"
                     >
                       +
                     </button>
                     <button
-                      onClick={() => remove(line.productId)}
+                      onClick={() => remove(line.id)}
                       className="ml-auto text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
                     >
                       Remove
