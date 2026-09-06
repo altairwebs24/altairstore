@@ -120,16 +120,54 @@ function ProductDetail() {
           <p className="eyebrow text-gold-leaf">{product.tagline ?? product.category}</p>
           <h1 className="mt-3 font-display text-3xl leading-tight">{product.name}</h1>
           <p className="mt-4 text-lg font-semibold">
-            {formatPrice(effectivePrice(product))}
+            {formatPrice(unitPrice)}
             {onSale && (
               <span className="ml-3 text-sm font-normal text-muted-foreground line-through">
-                {formatPrice(product.price)}
+                {formatPrice(product.price + priceDelta)}
               </span>
             )}
           </p>
           <p className="mt-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             {product.stock > 0 ? `${product.stock} available` : "Currently reserved"}
           </p>
+
+          {groups.map((group) => (
+            <div key={group.name} className="mt-7">
+              <p className="eyebrow text-muted-foreground">{group.name}</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {group.options.map((option, i) => {
+                  const isActive = (choices[group.name] ?? 0) === i;
+                  return (
+                    <button
+                      key={option.name + i}
+                      onClick={() => {
+                        setChoices((c) => ({ ...c, [group.name]: i }));
+                        setActive(0);
+                      }}
+                      className={`flex items-center gap-2 rounded-full border py-2 pl-2 pr-4 text-xs transition-colors ${
+                        isActive
+                          ? "border-obsidian bg-obsidian text-white"
+                          : "border-mercury text-obsidian/70"
+                      }`}
+                    >
+                      <span className="size-6 overflow-hidden rounded-full bg-mercury">
+                        {option.image && (
+                          <img src={option.image} alt="" className="size-full object-cover" />
+                        )}
+                      </span>
+                      {option.name}
+                      {option.price_delta ? (
+                        <span className="opacity-70">
+                          {option.price_delta > 0 ? "+" : "−"}
+                          {formatPrice(Math.abs(option.price_delta))}
+                        </span>
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
 
           <button
             disabled={product.stock <= 0}
@@ -138,10 +176,13 @@ function ProductDetail() {
                 productId: product.id,
                 slug: product.slug,
                 name: product.name,
-                price: effectivePrice(product),
-                image: product.images[0] ?? null,
+                variantLabel,
+                price: unitPrice,
+                image: images[0] ?? null,
               });
-              toast.success(`${product.name} added to your bag`);
+              toast.success(
+                `${product.name}${variantLabel ? ` (${variantLabel})` : ""} added to your bag`,
+              );
             }}
             className="mt-6 w-full rounded-full bg-obsidian py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-white disabled:opacity-40"
           >
