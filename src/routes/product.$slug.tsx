@@ -66,7 +66,17 @@ function ProductDetail() {
   }
 
   const onSale = product.sale_price !== null && product.sale_price < product.price;
-  const images = product.images.length ? product.images : [];
+  const groups = (product.variants ?? []).filter((g) => g.options?.length);
+  const selected = groups.map((g) => g.options[choices[g.name] ?? 0]);
+  const variantImages = selected.map((o) => o?.image).filter((src): src is string => !!src);
+  const images = [...variantImages, ...product.images].filter(
+    (src, i, all) => all.indexOf(src) === i,
+  );
+  const priceDelta = selected.reduce((sum, o) => sum + (o?.price_delta ?? 0), 0);
+  const unitPrice = effectivePrice(product) + priceDelta;
+  const variantLabel = groups
+    .map((g, i) => `${g.name}: ${selected[i]?.name ?? ""}`)
+    .join(" · ");
 
   return (
     <div className="min-h-screen bg-background text-obsidian">
