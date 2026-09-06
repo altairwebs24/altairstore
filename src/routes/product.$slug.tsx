@@ -36,6 +36,7 @@ function ProductDetail() {
   const { data: product, isLoading } = useQuery(productQuery(slug));
   const { add } = useCart();
   const [active, setActive] = useState(0);
+  const [choices, setChoices] = useState<Record<string, number>>({});
 
   if (isLoading) {
     return (
