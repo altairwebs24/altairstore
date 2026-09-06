@@ -55,7 +55,7 @@ export type Order = {
 };
 
 const PRODUCT_COLUMNS =
-  "id, slug, name, tagline, description, price, sale_price, images, category, stock, featured, published, source_url, specs, created_at";
+  "id, slug, name, tagline, description, price, sale_price, images, category, stock, featured, published, source_url, specs, variants, created_at";
 
 function normalize(row: unknown): Product {
   const p = row as Product & { price: string; sale_price: string | null };
@@ -65,6 +65,7 @@ function normalize(row: unknown): Product {
     sale_price: p.sale_price === null ? null : Number(p.sale_price),
     images: p.images ?? [],
     specs: (p.specs ?? {}) as Record<string, string>,
+    variants: Array.isArray(p.variants) ? (p.variants as VariantGroup[]) : [],
   };
 }
 
