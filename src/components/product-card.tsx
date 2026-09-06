@@ -56,21 +56,32 @@ export function ProductCard({ product }: { product: Product }) {
         </span>
       </div>
 
-      <button
-        onClick={() => {
-          add({
-            productId: product.id,
-            slug: product.slug,
-            name: product.name,
-            price: effectivePrice(product),
-            image: product.images[0] ?? null,
-          });
-          toast.success(`${product.name} added to your bag`);
-        }}
-        className="mt-3 rounded-full bg-obsidian px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition-opacity hover:opacity-85"
-      >
-        Add to bag
-      </button>
+      {product.variants?.length ? (
+        <Link
+          to="/product/$slug"
+          params={{ slug: product.slug }}
+          className="mt-3 rounded-full bg-obsidian px-4 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition-opacity hover:opacity-85"
+        >
+          Choose options
+        </Link>
+      ) : (
+        <button
+          onClick={() => {
+            add({
+              productId: product.id,
+              slug: product.slug,
+              name: product.name,
+              variantLabel: "",
+              price: effectivePrice(product),
+              image: product.images[0] ?? null,
+            });
+            toast.success(`${product.name} added to your bag`);
+          }}
+          className="mt-3 rounded-full bg-obsidian px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white transition-opacity hover:opacity-85"
+        >
+          Add to bag
+        </button>
+      )}
     </article>
   );
 }
