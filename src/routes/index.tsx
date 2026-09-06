@@ -99,24 +99,69 @@ function Home() {
         </div>
       </section>
 
-      <section className="px-6 py-8">
-        <div className="grid gap-4 sm:grid-cols-3">
-          {[film01, film02, film03].map((film, i) => (
+      <section className="px-6 py-12">
+        <div className="mb-6 flex items-end justify-between">
+          <div>
+            <p className="eyebrow text-muted-foreground">The Altair films</p>
+            <h2 className="mt-2 font-display text-2xl uppercase tracking-tight">In motion</h2>
+          </div>
+        </div>
+
+        {/* Feature film */}
+        <div className="relative overflow-hidden rounded-2xl bg-mercury">
+          <video
+            src={film01.url}
+            className="aspect-[4/5] w-full object-cover sm:aspect-[16/9]"
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="auto"
+          />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-obsidian/80 to-transparent p-6 pt-16 text-white sm:p-8 sm:pt-24">
+            <p className="eyebrow text-gold-leaf">Chapter I</p>
+            <p className="mt-2 font-serif text-lg italic">Where the light catches the steel.</p>
+          </div>
+        </div>
+
+        {/* Two smaller films with captions */}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div className="flex items-center gap-4 overflow-hidden rounded-2xl border border-mercury bg-background p-3">
             <video
-              key={film.url}
-              src={film.url}
-              className="aspect-[9/16] w-full rounded-xl bg-mercury object-cover"
+              src={film02.url}
+              className="aspect-[9/16] w-28 shrink-0 rounded-xl bg-mercury object-cover sm:w-36"
               muted
               loop
               playsInline
               autoPlay
-              preload={i === 0 ? "auto" : "metadata"}
+              preload="metadata"
             />
-          ))}
+            <div className="py-2 pr-2">
+              <p className="eyebrow text-gold-leaf">Chapter II</p>
+              <p className="mt-2 font-serif text-base leading-snug text-obsidian/80">
+                The crown, the case, the quiet confidence of detail.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-row-reverse items-center gap-4 overflow-hidden rounded-2xl border border-mercury bg-background p-3 sm:flex-row">
+            <video
+              src={film03.url}
+              className="aspect-[9/16] w-28 shrink-0 rounded-xl bg-mercury object-cover sm:w-36"
+              muted
+              loop
+              playsInline
+              autoPlay
+              preload="metadata"
+            />
+            <div className="py-2 pl-2 sm:pl-0 sm:pr-2">
+              <p className="eyebrow text-gold-leaf">Chapter III</p>
+              <p className="mt-2 font-serif text-base leading-snug text-obsidian/80">
+                Built to be worn, made to be remembered.
+              </p>
+            </div>
+          </div>
         </div>
-        <p className="mt-4 text-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-          The Altair films
-        </p>
       </section>
 
       <section className="mx-6 my-12 overflow-hidden rounded-3xl bg-obsidian text-white">
