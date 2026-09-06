@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Sparkles, Trash2, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { slugify, uploadStoreImage, type Product } from "@/lib/store";
+import { slugify, uploadStoreImage, type Product, type VariantGroup } from "@/lib/store";
 import { enhanceDescription, importFromLink } from "@/lib/ai.functions";
 import { adminField, GhostButton, GoldButton, Label, Panel, PrimaryButton } from "./ui";
 
@@ -21,6 +21,7 @@ type Draft = {
   source_url: string;
   images: string[];
   specs: Record<string, string>;
+  variants: VariantGroup[];
 };
 
 const emptyDraft: Draft = {
@@ -36,6 +37,7 @@ const emptyDraft: Draft = {
   source_url: "",
   images: [],
   specs: { case: "", movement: "", glass: "", water: "" },
+  variants: [],
 };
 
 function toDraft(product: Product): Draft {
@@ -52,6 +54,7 @@ function toDraft(product: Product): Draft {
     source_url: product.source_url ?? "",
     images: product.images,
     specs: { case: "", movement: "", glass: "", water: "", ...product.specs },
+    variants: product.variants ?? [],
   };
 }
 
@@ -72,6 +75,17 @@ export function ProductEditor({
 
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
     setDraft((d) => ({ ...d, [key]: value }));
+
+  const updateGroup = (gi: number, group: VariantGroup) =>
+    setDraft((d) => ({ ...d, variants: d.variants.map((g, i) => (i === gi ? group : g)) }));
+
+  const updateOption = (gi: number, oi: number, option: VariantGroup["options"][number]) =>
+    setDraft((d) => ({
+      ...d,
+      variants: d.variants.map((g, i) =>
+        i === gi ? { ...g, options: g.options.map((o, j) => (j === oi ? option : o)) } : g,
+      ),
+    }));
 
   const handleUpload = async (files: FileList | null) => {
     if (!files?.length) return;
@@ -159,6 +173,7 @@ export function ProductEditor({
         source_url: draft.source_url || null,
         images: draft.images,
         specs,
+        variants: draft.variants,
       };
 
       const { error } = editing
@@ -343,6 +358,91 @@ export function ProductEditor({
                 }
               }}
             />
+          </div>
+
+          <div className="sm:col-span-2">
+            <div className="flex items-center justify-between">
+              <Label>Variations (e.g. colour)</Label>
+              <GoldButton
+                onClick={() =>
+                  set("variants", [...draft.variants, { name: "Colour", options: [{ name: "" }] }])
+                }
+              >
+                Add group
+              </GoldButton>
+            </div>
+            <p className="mt-2 text-xs text-white/50">
+              Each option can have its own photo and a price difference (use a minus for cheaper).
+            </p>
+
+            {draft.variants.map((group, gi) => (
+              <div key={gi} className="mt-3 rounded-lg border border-white/10 p-3">
+                <div className="flex gap-2">
+                  <input
+                    className={adminField}
+                    placeholder="Group name"
+                    value={group.name}
+                    onChange={(e) => updateGroup(gi, { ...group, name: e.target.value })}
+                  />
+                  <GhostButton
+                    onClick={() => set("variants", draft.variants.filter((_, i) => i !== gi))}
+                  >
+                    Remove
+                  </GhostButton>
+                </div>
+
+                {group.options.map((option, oi) => (
+                  <div key={oi} className="mt-2 grid gap-2 sm:grid-cols-[1fr_1fr_100px_auto]">
+                    <input
+                      className={adminField}
+                      placeholder="Option name (Midnight)"
+                      value={option.name}
+                      onChange={(e) => updateOption(gi, oi, { ...option, name: e.target.value })}
+                    />
+                    <input
+                      className={adminField}
+                      placeholder="Photo address (optional)"
+                      value={option.image ?? ""}
+                      onChange={(e) =>
+                        updateOption(gi, oi, { ...option, image: e.target.value || null })
+                      }
+                    />
+                    <input
+                      type="number"
+                      className={adminField}
+                      placeholder="± R"
+                      value={option.price_delta ?? ""}
+                      onChange={(e) =>
+                        updateOption(gi, oi, {
+                          ...option,
+                          price_delta: e.target.value ? Number(e.target.value) : undefined,
+                        })
+                      }
+                    />
+                    <GhostButton
+                      onClick={() =>
+                        updateGroup(gi, {
+                          ...group,
+                          options: group.options.filter((_, i) => i !== oi),
+                        })
+                      }
+                    >
+                      <Trash2 className="size-3" />
+                    </GhostButton>
+                  </div>
+                ))}
+
+                <div className="mt-2">
+                  <GhostButton
+                    onClick={() =>
+                      updateGroup(gi, { ...group, options: [...group.options, { name: "" }] })
+                    }
+                  >
+                    Add option
+                  </GhostButton>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="flex flex-wrap gap-5 sm:col-span-2">
